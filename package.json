@@ -1,0 +1,46 @@
+{
+  "name": "ollama-monitor",
+  "private": true,
+  "version": "1.0.0",
+  "author": "jbrink90",
+  "type": "module",
+  "packageManager": "pnpm@10.30.1",
+  "scripts": {
+    "dev:next": "next dev --turbopack",
+    "dev:next:webpack": "next dev --webpack",
+    "build:next": "next build",
+    "build:next:webpack": "next build --webpack",
+    "test": "vitest run",
+    "tauri": "tauri",
+    "format": "biome format",
+    "lint": "biome check",
+    "fix": "biome check --write",
+    "dev": "tauri dev",
+    "build": "tauri build"
+  },
+  "dependencies": {
+    "@tauri-apps/api": "^2.10.1",
+    "@tauri-apps/plugin-opener": "^2.5.3",
+    "@tauri-apps/plugin-process": "^2.3.1",
+    "lucide-react": "^1.35.0",
+    "next": "^16.2.12",
+    "react": "^19.2.4",
+    "react-dom": "^19.2.4"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "^2.4.6",
+    "@tailwindcss/postcss": "^4.2.1",
+    "@tauri-apps/cli": "^2.10.1",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/node": "^25.3.5",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.4",
+    "jsdom": "^28.1.0",
+    "tailwindcss": "^4.2.1",
+    "typescript": "~5.9.3",
+    "vite-tsconfig-paths": "^6.1.1",
+    "vitest": "^4.1.0"
+  }
+}
