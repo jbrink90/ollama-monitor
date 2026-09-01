@@ -77,17 +77,22 @@ export default function SettingsPage() {
   };
 
   const saveSettings = async () => {
+    if (typeof window === "undefined") return;
+
     localStorage.setItem("refreshInterval", String(refreshInterval));
     localStorage.setItem("ollamaInstance", ollamaInstance);
     localStorage.setItem("totalRam", String(totalRam));
     localStorage.setItem("totalVram", String(totalVram));
 
-    await emit("settings-changed", {
-      refreshInterval,
-      ollamaInstance,
-      totalRam,
-      totalVram,
-    });
+    if ("__TAURI_INTERNALS__" in window) {
+      await emit("settings-changed", {
+        refreshInterval,
+        ollamaInstance,
+        totalRam,
+        totalVram,
+      });
+    }
+
     close();
   };
 
@@ -95,7 +100,7 @@ export default function SettingsPage() {
     <div className="h-screen w-screen flex flex-col bg-[#23374b] border rounded-xl border-gray-300/30 text-white">
       <header
         data-tauri-drag-region
-        className="shrink-0 flex flex-row justify-between w-full border-b-2 border-white pb-4 pt-6"
+        className="shrink-0 flex flex-row justify-between w-full border-b-2 border-white/10 pb-4 pt-6"
       >
         <div className="flex flex-row gap-4 w-full pl-8 select-none">
           <h1 className="text-3xl">Settings</h1>

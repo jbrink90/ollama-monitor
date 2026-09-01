@@ -9,6 +9,7 @@ import { useEffect, useState } from "react";
 import { Inter } from "next/font/google";
 import { getModelBrand } from "@/lib/ModelImageProvider";
 import { getOllamaPs, calculateProcessorStats, OllamaPsModel, getProcessorSplit, getOllamaModels, combineOllamaModels, getRelativeExpiration, getOllamaUrl } from "@/lib/ollama";
+import RadialChart from "./RadialChart";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,24 +20,23 @@ export default function MainWidget() {
   const [error, setError] = useState<string | null>(null);
   const [onTop, setOnTop] = useState(false);
   const [modelList, setModelList] = useState<OllamaPsModel[]>([]);
-  const [refreshInterval, setRefreshInterval] = useState(() => {
-    if (typeof window === "undefined") return 5000;
-    const saved = localStorage.getItem("refreshInterval");
-    return saved ? Number(saved) : 5000;
-  });
-  const [totalRam, setTotalRam] = useState(() => {
-    if (typeof window === "undefined") return 32;
-    const saved = localStorage.getItem("totalRam");
-    return saved ? Number(saved) : 32;
-  });
-  const [totalVram, setTotalVram] = useState(() => {
-    if (typeof window === "undefined") return 12;
-    const saved = localStorage.getItem("totalVram");
-    return saved ? Number(saved) : 12;
-  });
+  const [refreshInterval, setRefreshInterval] = useState(5000);
+  const [totalRam, setTotalRam] = useState(32);
+  const [totalVram, setTotalVram] = useState(12);
 
   const totalVramBytes = totalVram * 1024 ** 3;
   const totalRamBytes = totalRam * 1024 ** 3;
+
+  // Load localStorage values after hydration to avoid mismatch
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const savedRefresh = localStorage.getItem("refreshInterval");
+    if (savedRefresh) setRefreshInterval(Number(savedRefresh));
+    const savedRam = localStorage.getItem("totalRam");
+    if (savedRam) setTotalRam(Number(savedRam));
+    const savedVram = localStorage.getItem("totalVram");
+    if (savedVram) setTotalVram(Number(savedVram));
+  }, []);
 
   const [gpuStats, setGpuStats] = useState({
     used: 0,
@@ -52,9 +52,14 @@ export default function MainWidget() {
 
   const openSettings = async () => {
     if (typeof window === "undefined") return;
-    // Only run inside Tauri
-    if (!("__TAURI_INTERNALS__" in window)) return;
 
+    // In browser, open settings in new tab
+    if (!("__TAURI_INTERNALS__" in window)) {
+      window.open("/settings", "_blank");
+      return;
+    }
+
+    // In Tauri, show settings window
     const settings = await WebviewWindow.getByLabel("settings");
 
     if (settings) {
@@ -268,38 +273,33 @@ export default function MainWidget() {
                         <span></span>
                       )}</div></div>
                 </div>
-                <div className="py-2 flex flex-col items-center text-white/50 text-md gap-1">
+                <div className="flex flex-col items-center text-white/50 text-md">
 
                   {model.status === "Loaded" ? (
                     <>
-                      <Image
-                        src="/green_graph.png"
-                        width={64}
-                        height={64}
-                        alt="GPU usage"
-                        priority
-                        className="select-none"
+                      <RadialChart
+                        value={getProcessorSplit(model).gpu}
+                        color="#22c55e"
+                        size={100}
                       />
-                      <span>{getProcessorSplit(model).gpu}%</span>
+                      <span>{(gpuStats.used / 1024 / 1024 / 1024).toFixed(1)} GB</span>
+
                     </>
                   ) : (
                     <span></span>
                   )}
                 </div>
 
-                <div className="py-2 flex flex-col items-center text-white/50 text-md gap-1">
+                <div className="flex flex-col items-center text-white/50 text-md">
 
                   {model.status === "Loaded" ? (
                     <>
-                      <Image
-                        src="/blue_graph.png"
-                        width={64}
-                        height={64}
-                        alt="CPU usage"
-                        priority
-                        className="select-none"
+                      <RadialChart
+                        value={getProcessorSplit(model).cpu}
+                        color="#3b82f6"
+                        size={100}
                       />
-                      <span>{getProcessorSplit(model).cpu}%</span>
+                      <span>{(cpuStats.used / 1024 / 1024 / 1024).toFixed(1)} GB</span>
                     </>
                   ) : (
                     <span></span>
