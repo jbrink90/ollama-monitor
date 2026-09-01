@@ -52,9 +52,7 @@ const modelBrands: Array<{
 ];
 
 export function getModelBrand(modelName: string): ModelBrand {
-  const match = modelBrands.find((entry) =>
-    entry.match.test(modelName)
-  );
+  const match = modelBrands.find((entry) => entry.match.test(modelName));
 
   return (
     match?.brand ?? {

@@ -1,6 +1,5 @@
 @import "tailwindcss";
 
-
 @theme {
   --font-sans: var(--font-inter);
   --font-mono: var(--font-geist-mono);
@@ -53,18 +52,16 @@ body {
 main {
   border-radius: 20px;
 
-  background:
-    linear-gradient(
-      135deg,
-      rgba(35, 55, 75, 0.95),
-      rgba(8, 18, 30, 0.95)
-    );
+  background: linear-gradient(
+    135deg,
+    rgba(35, 55, 75, 0.95),
+    rgba(8, 18, 30, 0.95)
+  );
 
   backdrop-filter: blur(30px) saturate(120%);
   -webkit-backdrop-filter: blur(30px) saturate(120%);
 
   border: 1px solid rgba(255, 255, 255, 0.14);
-
 
   box-shadow:
     0 24px 60px rgba(0, 0, 0, 0.45),
@@ -75,12 +72,11 @@ main::before {
   position: absolute;
   inset: 0;
 
-  background:
-    radial-gradient(
-      circle at 15% 10%,
-      rgba(60, 130, 200, 0.12),
-      transparent 45%
-    );
+  background: radial-gradient(
+    circle at 15% 10%,
+    rgba(60, 130, 200, 0.12),
+    transparent 45%
+  );
 
   pointer-events: none;
   border-radius: inherit;
@@ -105,11 +101,15 @@ main::before {
   background: rgba(255, 255, 255, 0.4);
 }
 .loading-spinner {
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  background:conic-gradient(#0000 10%,#88E0F4);
-  -webkit-mask:radial-gradient(farthest-side,#0000 calc(100% - 8px),#000 0);
-  animation:s3 1s infinite linear;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: conic-gradient(#0000 10%, #88e0f4);
+  -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 8px), #000 0);
+  animation: s3 1s infinite linear;
 }
-@keyframes s3 {to{transform: rotate(1turn)}}
+@keyframes s3 {
+  to {
+    transform: rotate(1turn);
+  }
+}

@@ -1,19 +1,13 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import type { ApexOptions } from "apexcharts";
+import dynamic from "next/dynamic";
 
-const ReactApexChart = dynamic(
-  () => import("react-apexcharts"),
-  {
-    ssr: false,
+const ReactApexChart = dynamic(() => import("react-apexcharts"), {
+  ssr: false,
 
-    loading: () => (
-      <div className="loading-spinner" />
-    ),
-  }
-  
-);
+  loading: () => <div className="loading-spinner" />,
+});
 
 interface RadialChartProps {
   value: number;
@@ -26,56 +20,55 @@ export default function RadialChart({
   color = "#465FFF",
   size = 64,
 }: RadialChartProps) {
+  const options: ApexOptions = {
+    colors: [color],
 
-const options: ApexOptions = {
-  colors: [color],
+    chart: {
+      type: "radialBar",
+      height: size,
+      width: size,
+      fontFamily: "Arial, sans-serif",
+    },
 
-  chart: {
-    type: "radialBar",
-    height: size,
-    width: size,
-    fontFamily: "Arial, sans-serif",
-  },
+    plotOptions: {
+      radialBar: {
+        startAngle: 0,
+        endAngle: 360,
 
-  plotOptions: {
-    radialBar: {
-      startAngle: 0,
-      endAngle: 360,
-
-      hollow: {
-        size: "50%",
-      },
-
-      track: {
-        background: "#374151",
-        strokeWidth: "100%",
-      },
-
-      dataLabels: {
-        name: {
-          show: false,
+        hollow: {
+          size: "50%",
         },
 
-        value: {
-          show: true,
-          fontSize: "14px",
-          fontWeight: 600,
-          color: "#9CA3AF",
-          offsetY: 5,
-          formatter: (val) => `${Math.round(val)}%`,
+        track: {
+          background: "#374151",
+          strokeWidth: "100%",
+        },
+
+        dataLabels: {
+          name: {
+            show: false,
+          },
+
+          value: {
+            show: true,
+            fontSize: "14px",
+            fontWeight: 600,
+            color: "#9CA3AF",
+            offsetY: 5,
+            formatter: (val) => `${Math.round(val)}%`,
+          },
         },
       },
     },
-  },
 
-  fill: {
-    type: "solid",
-  },
+    fill: {
+      type: "solid",
+    },
 
-  stroke: {
-    lineCap: "round",
-  },
-};
+    stroke: {
+      lineCap: "round",
+    },
+  };
 
   return (
     <ReactApexChart

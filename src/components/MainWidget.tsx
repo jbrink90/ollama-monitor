@@ -1,14 +1,31 @@
 "use client";
+import { listen } from "@tauri-apps/api/event";
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { getCurrentWindow } from "@tauri-apps/api/window";
-import { listen } from "@tauri-apps/api/event";
 import { exit } from "@tauri-apps/plugin-process";
-import { MemoryStick, Gpu, Minus, Pin, Settings, X, RefreshCw } from "lucide-react";
+import {
+  Gpu,
+  MemoryStick,
+  Minus,
+  Pin,
+  RefreshCw,
+  Settings,
+  X,
+} from "lucide-react";
+import { Inter } from "next/font/google";
 import Image from "next/image";
 import { useEffect, useState } from "react";
-import { Inter } from "next/font/google";
 import { getModelBrand } from "@/lib/ModelImageProvider";
-import { getOllamaPs, calculateProcessorStats, OllamaPsModel, getProcessorSplit, getOllamaModels, combineOllamaModels, getRelativeExpiration, getOllamaUrl } from "@/lib/ollama";
+import {
+  calculateProcessorStats,
+  combineOllamaModels,
+  getOllamaModels,
+  getOllamaPs,
+  getOllamaUrl,
+  getProcessorSplit,
+  getRelativeExpiration,
+  type OllamaPsModel,
+} from "@/lib/ollama";
 import RadialChart from "./RadialChart";
 
 const inter = Inter({
@@ -49,7 +66,6 @@ export default function MainWidget() {
     percentage: 0,
   });
 
-
   const openSettings = async () => {
     if (typeof window === "undefined") return;
 
@@ -66,7 +82,6 @@ export default function MainWidget() {
       await settings.show();
       await settings.setFocus();
     }
-
   };
 
   const minimize = async () => {
@@ -88,28 +103,22 @@ export default function MainWidget() {
         getOllamaModels(),
       ]);
 
-
-      const models = combineOllamaModels(
-        psData.models,
-        tagsData.models
-      );
+      const models = combineOllamaModels(psData.models, tagsData.models);
 
       setModelList(models);
 
       const stats = calculateProcessorStats(
         psData.models,
         totalVramBytes,
-        totalRamBytes
+        totalRamBytes,
       );
 
       setGpuStats(stats.gpu);
       setCpuStats(stats.cpu);
-
     } catch (error) {
       console.error(error);
-      setError(String(error) + ": " + getOllamaUrl());
+      setError(`${String(error)}: ${getOllamaUrl()}`);
     }
-
   };
 
   const close = async () => {
@@ -134,7 +143,7 @@ export default function MainWidget() {
     refresh();
     const timer = setInterval(refresh, refreshInterval);
     return () => clearInterval(timer);
-  }, [refreshInterval, totalRam, totalVram]);
+  }, [refreshInterval, refresh]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -173,7 +182,7 @@ export default function MainWidget() {
     return () => {
       unlisten?.();
     };
-  }, []);
+  }, [refresh]);
 
   return (
     <main className="h-screen w-screen flex flex-col overflow-hidden select-none spacing tracking-wider">
@@ -191,8 +200,13 @@ export default function MainWidget() {
             className="w-[63] h-[63] select-none"
           />
           <div className="flex flex-col w-full pl-3 justify-end">
-            <h1 className="text-2xl letter-spacing-[1px]">Ollama Model Monitor</h1>
-            <span className="text-white/50 text-lg">  {modelList.filter(m => m.status === "Loaded").length} models loaded
+            <h1 className="text-2xl letter-spacing-[1px]">
+              Ollama Model Monitor
+            </h1>
+            <span className="text-white/50 text-lg">
+              {" "}
+              {modelList.filter((m) => m.status === "Loaded").length} models
+              loaded
             </span>
           </div>
         </div>
@@ -215,11 +229,7 @@ export default function MainWidget() {
         </div>
       </header>
       <div className="flex-1 min-h-0 min-w-0 w-full flex flex-col">
-        {error && (
-          <div className="text-red-400">
-            {error}
-          </div>
-        )}
+        {error && <div className="text-red-400">{error}</div>}
         <div className="w-full px-4 pt-4 shrink-0">
           <div className="grid grid-cols-[2fr_1fr_1fr_1fr] text-center border-b-2 border-white/10 pb-3 text-white/50">
             <div className="text-left pl-4">MODEL</div>
@@ -247,18 +257,25 @@ export default function MainWidget() {
                     />
                   </div>
                   <div className="flex justify-center flex-col pl-8 items-center">
-                    <span className={`flex ${inter.variable} text-xl`}>{model.name.slice(model.name.lastIndexOf("/") + 1)}</span>
-                    <span className={`flex ${inter.variable} text-md text-white/50 justify-center`}>{model.details.parameter_size} Parameters</span>
+                    <span className={`flex ${inter.variable} text-xl`}>
+                      {model.name.slice(model.name.lastIndexOf("/") + 1)}
+                    </span>
+                    <span
+                      className={`flex ${inter.variable} text-md text-white/50 justify-center`}
+                    >
+                      {model.details.parameter_size} Parameters
+                    </span>
                   </div>
                 </div>
 
                 <div className="py-4 flex flex-col">
                   <div className="flex items-center justify-center gap-2">
                     <span
-                      className={`h-2.5 w-2.5 rounded-full inline-block ${model.status === "Loaded"
-                        ? "bg-green-500"
-                        : "bg-white/30"
-                        }`}
+                      className={`h-2.5 w-2.5 rounded-full inline-block ${
+                        model.status === "Loaded"
+                          ? "bg-green-500"
+                          : "bg-white/30"
+                      }`}
                     />
                     <span className="text-lg">{model.status}</span>
                   </div>
@@ -266,15 +283,20 @@ export default function MainWidget() {
                     <div className="flex flex-col items-center">
                       {model.status === "Loaded" ? (
                         <>
-                          <span className="flex text-white/30 text-md" >Context: {model.context_length}</span>
-                          <span className="flex text-xs text-white/50">Expires: {getRelativeExpiration(model.expires_at)}</span>
+                          <span className="flex text-white/30 text-md">
+                            Context: {model.context_length}
+                          </span>
+                          <span className="flex text-xs text-white/50">
+                            Expires: {getRelativeExpiration(model.expires_at)}
+                          </span>
                         </>
                       ) : (
                         <span></span>
-                      )}</div></div>
+                      )}
+                    </div>
+                  </div>
                 </div>
                 <div className="flex flex-col items-center text-white/50 text-md">
-
                   {model.status === "Loaded" ? (
                     <>
                       <RadialChart
@@ -282,8 +304,9 @@ export default function MainWidget() {
                         color="#22c55e"
                         size={100}
                       />
-                      <span>{(gpuStats.used / 1024 / 1024 / 1024).toFixed(1)} GB</span>
-
+                      <span>
+                        {(gpuStats.used / 1024 / 1024 / 1024).toFixed(1)} GB
+                      </span>
                     </>
                   ) : (
                     <span></span>
@@ -291,7 +314,6 @@ export default function MainWidget() {
                 </div>
 
                 <div className="flex flex-col items-center text-white/50 text-md">
-
                   {model.status === "Loaded" ? (
                     <>
                       <RadialChart
@@ -299,7 +321,9 @@ export default function MainWidget() {
                         color="#3b82f6"
                         size={100}
                       />
-                      <span>{(cpuStats.used / 1024 / 1024 / 1024).toFixed(1)} GB</span>
+                      <span>
+                        {(cpuStats.used / 1024 / 1024 / 1024).toFixed(1)} GB
+                      </span>
                     </>
                   ) : (
                     <span></span>
@@ -319,8 +343,13 @@ export default function MainWidget() {
               <div className="flex text-sm text-white/50">vRAM Usage</div>
             </div>
             <div className="flex flex-col">
-              <div className="flex text-2xl">{gpuStats.percentage.toFixed(0)}%</div>
-              <div className="flex text-sm text-white/50">{(gpuStats.used / 1024 / 1024 / 1024).toFixed(1)} GB / {(gpuStats.total / 1024 / 1024 / 1024).toFixed(0)} GB</div>
+              <div className="flex text-2xl">
+                {gpuStats.percentage.toFixed(0)}%
+              </div>
+              <div className="flex text-sm text-white/50">
+                {(gpuStats.used / 1024 / 1024 / 1024).toFixed(1)} GB /{" "}
+                {(gpuStats.total / 1024 / 1024 / 1024).toFixed(0)} GB
+              </div>
             </div>
           </div>
         </div>
@@ -332,8 +361,13 @@ export default function MainWidget() {
               <div className="flex text-sm text-white/50">RAM Usage</div>
             </div>
             <div className="flex flex-col">
-              <div className="flex text-2xl">{cpuStats.percentage.toFixed(0)}%</div>
-              <div className="flex text-sm text-white/50">{(cpuStats.used / 1024 / 1024 / 1024).toFixed(1)} GB / {(cpuStats.total / 1024 / 1024 / 1024).toFixed(0)} GB</div>
+              <div className="flex text-2xl">
+                {cpuStats.percentage.toFixed(0)}%
+              </div>
+              <div className="flex text-sm text-white/50">
+                {(cpuStats.used / 1024 / 1024 / 1024).toFixed(1)} GB /{" "}
+                {(cpuStats.total / 1024 / 1024 / 1024).toFixed(0)} GB
+              </div>
             </div>
           </div>
         </div>

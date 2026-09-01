@@ -66,16 +66,13 @@ export function getProcessorSplit(model: OllamaPsModel) {
 export function calculateProcessorStats(
   models: OllamaPsModel[],
   totalVram: number,
-  totalRam: number
+  totalRam: number,
 ) {
-  const usedVram = models.reduce(
-    (total, model) => total + model.size_vram,
-    0
-  );
+  const usedVram = models.reduce((total, model) => total + model.size_vram, 0);
 
   const usedRam = models.reduce(
     (total, model) => total + (model.size - model.size_vram),
-    0
+    0,
   );
 
   return {
@@ -98,26 +95,28 @@ export async function getOllamaModels(): Promise<OllamaTagsResponse> {
   const data = await response.json();
 
   data.models.sort((a: OllamaTagsModel, b: OllamaTagsModel) => {
-    return new Date(b.modified_at).getTime() - new Date(a.modified_at).getTime();
+    return (
+      new Date(b.modified_at).getTime() - new Date(a.modified_at).getTime()
+    );
   });
 
   return data;
 }
 
 export async function getOllamaPs(): Promise<OllamaPsResponse> {
-   try {
+  try {
     const response = await fetch(`${getOllamaUrl()}/api/ps`);
 
     if (!response.ok) {
       throw new Error(
-        `Ollama returned ${response.status} ${response.statusText}`
+        `Ollama returned ${response.status} ${response.statusText}`,
       );
     }
 
     return response.json();
   } catch (error) {
     throw new Error(
-      `Failed to reach Ollama at ${getOllamaUrl()}/api/ps: ${error}`
+      `Failed to reach Ollama at ${getOllamaUrl()}/api/ps: ${error}`,
     );
   }
 }
@@ -128,7 +127,8 @@ export async function getOllamaPsMock(): Promise<OllamaPsResponse> {
         name: "qwen3:30b-a3b",
         model: "qwen3:30b-a3b",
         size: 19609891632,
-        digest: "ad815644918f0eaab341c12b67837cc6dd4562342cdaf118f83d5d554cb37226",
+        digest:
+          "ad815644918f0eaab341c12b67837cc6dd4562342cdaf118f83d5d554cb37226",
         details: {
           parent_model: "",
           format: "gguf",
@@ -148,16 +148,14 @@ export async function getOllamaPsMock(): Promise<OllamaPsResponse> {
 
 export function combineOllamaModels(
   loadedModels: OllamaPsModel[],
-  allModels: OllamaTagsModel[]
+  allModels: OllamaTagsModel[],
 ): OllamaPsModel[] {
   const loaded = loadedModels.map((model) => ({
     ...model,
     status: "Loaded" as const,
   }));
 
-  const loadedNames = new Set(
-    loadedModels.map((model) => model.name)
-  );
+  const loadedNames = new Set(loadedModels.map((model) => model.name));
 
   const unloaded = allModels
     .filter((model) => !loadedNames.has(model.name))

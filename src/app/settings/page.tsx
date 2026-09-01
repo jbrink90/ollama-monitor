@@ -1,9 +1,8 @@
 "use client";
 import { emit } from "@tauri-apps/api/event";
-import { getCurrentWindow } from "@tauri-apps/api/window";
 import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { Minus, X } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 const refreshIntervalOptions = [
   { label: "1 second", value: 1000 },
@@ -93,7 +92,7 @@ export default function SettingsPage() {
       });
     }
 
-    close();
+    await close();
   };
 
   return (
