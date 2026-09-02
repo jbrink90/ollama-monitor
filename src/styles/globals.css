@@ -21,7 +21,7 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-inter), system-ui, sans-serif;
-  min-width: 700px;
+  /* min-width: 700px; */
 }
 
 .four-corner-gradient {
@@ -63,9 +63,9 @@ main {
 
   border: 1px solid rgba(255, 255, 255, 0.14);
 
-  box-shadow:
+  /* box-shadow:
     0 24px 60px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    inset 0 1px 0 rgba(255, 255, 255, 0.08); */
 }
 main::before {
   content: "";
