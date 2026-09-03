@@ -171,6 +171,7 @@ export default function SmallWidget({
               "
             >
               <button
+                type="button"
                 onClick={onToggleOnTop}
                 className={`
                   p-2
@@ -188,6 +189,7 @@ export default function SmallWidget({
               </button>
 
               <button
+                type="button"
                 onClick={onSettings}
                 className="
                   p-2
@@ -204,6 +206,7 @@ export default function SmallWidget({
               </button>
 
               <button
+                type="button"
                 onClick={onMinimize}
                 className="
                   p-2
@@ -220,6 +223,7 @@ export default function SmallWidget({
               </button>
 
               <button
+                type="button"
                 onClick={onClose}
                 className="
                   p-2
@@ -457,6 +461,7 @@ export default function SmallWidget({
             "
           >
             <button
+                type="button"
               onClick={onToggleOnTop}
               className={`
                 p-2
@@ -473,7 +478,8 @@ export default function SmallWidget({
               <Pin className="w-5 h-5" />
             </button>
 
-            <button
+            <button 
+              type="button"
               onClick={onSettings}
               className="
                 p-2
@@ -490,6 +496,7 @@ export default function SmallWidget({
             </button>
 
             <button
+              type="button"
               onClick={onMinimize}
               className="
                 p-2
@@ -506,6 +513,7 @@ export default function SmallWidget({
             </button>
 
             <button
+              type="button"
               onClick={onClose}
               className="
                 p-2
@@ -634,7 +642,7 @@ export default function SmallWidget({
             </div>
           </div>
 
-          {contextInThousands && (
+          {contextInThousands !== undefined && (
             <div
               className="
                 shrink-0

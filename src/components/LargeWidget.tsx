@@ -159,6 +159,7 @@ export default function LargeWidget({
           "
         >
           <button
+            type="button"
             className="cursor-pointer"
             onClick={onRefresh}
             aria-label="Refresh"
@@ -182,6 +183,7 @@ export default function LargeWidget({
           </button>
 
           <button
+            type="button"
             className="cursor-pointer"
             onClick={onSettings}
             aria-label="Settings"
@@ -190,6 +192,7 @@ export default function LargeWidget({
           </button>
 
           <button
+            type="button"
             className="cursor-pointer"
             onClick={onMinimize}
             aria-label="Minimize"
@@ -198,6 +201,7 @@ export default function LargeWidget({
           </button>
 
           <button
+            type="button"
             className="cursor-pointer"
             onClick={onClose}
             aria-label="Close"
@@ -217,7 +221,7 @@ export default function LargeWidget({
           flex-col
         "
       >
-        {error && (
+        {Boolean(error) && (
           <div className="text-red-400 px-4 pt-2">
             {error}
           </div>
