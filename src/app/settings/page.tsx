@@ -1,7 +1,5 @@
 "use client";
 
-import { emit } from "@tauri-apps/api/event";
-import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 import { Minus, X } from "lucide-react";
 import { useState } from "react";
 
@@ -87,6 +85,7 @@ export default function SettingsPage() {
 
     if (!("__TAURI_INTERNALS__" in window)) return;
 
+    const { WebviewWindow } = await import("@tauri-apps/api/webviewWindow");
     const settingsWindow =
       await WebviewWindow.getByLabel("settings");
 
@@ -100,6 +99,7 @@ export default function SettingsPage() {
 
     if (!("__TAURI_INTERNALS__" in window)) return;
 
+    const { WebviewWindow } = await import("@tauri-apps/api/webviewWindow");
     const settingsWindow =
       await WebviewWindow.getByLabel("settings");
 
@@ -157,6 +157,7 @@ export default function SettingsPage() {
     );
 
     if ("__TAURI_INTERNALS__" in window) {
+      const { emit } = await import("@tauri-apps/api/event");
       await emit("settings-changed", {
         refreshInterval,
         ollamaInstance,

@@ -1,8 +1,4 @@
 "use client";
-import { listen } from "@tauri-apps/api/event";
-import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
-import { getCurrentWindow } from "@tauri-apps/api/window";
-import { exit } from "@tauri-apps/plugin-process";
 import { useCallback, useEffect, useState } from "react";
 import {
   calculateProcessorStats,
@@ -74,6 +70,7 @@ export default function MainWidget() {
     }
 
     const { LogicalSize } = await import("@tauri-apps/api/dpi");
+    const { getCurrentWindow } = await import("@tauri-apps/api/window");
     const tauriWindow = getCurrentWindow();
     if (isSmall) {
       await tauriWindow.setSize(
@@ -142,8 +139,7 @@ export default function MainWidget() {
       return;
     }
 
-
-
+    const { WebviewWindow } = await import("@tauri-apps/api/webviewWindow");
     const settings =
       await WebviewWindow.getByLabel(
         "settings",
@@ -163,6 +159,7 @@ export default function MainWidget() {
       return;
     }
 
+    const { getCurrentWindow } = await import("@tauri-apps/api/window");
     await getCurrentWindow().minimize();
   };
 
@@ -173,6 +170,7 @@ export default function MainWidget() {
       return;
     }
 
+    const { exit } = await import("@tauri-apps/plugin-process");
     await exit(0);
   };
 
@@ -186,6 +184,7 @@ export default function MainWidget() {
         return;
       }
 
+      const { getCurrentWindow } = await import("@tauri-apps/api/window");
       await getCurrentWindow().setAlwaysOnTop(
         onTop,
       );
@@ -228,6 +227,7 @@ export default function MainWidget() {
       | undefined;
 
     const setupListener = async () => {
+      const { listen } = await import("@tauri-apps/api/event");
       unlisten = await listen(
         "settings-changed",
         (event) => {

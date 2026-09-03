@@ -2,6 +2,14 @@
 
 A lightweight desktop dashboard for monitoring locally running [Ollama](https://ollama.com/) models. Built with Tauri + Next.js.
 
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jbrink90/ollama-model-monitor/main/screenshots/main.png" alt="Main Dashboard" />
+</p>
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/jbrink90/ollama-model-monitor/main/screenshots/widget.png" alt="Widget View" />
+</p>
+
 ## Features
 
 - Desktop widget UI with always-on-top toggle
@@ -75,4 +83,4 @@ Then restart Ollama Desktop completely.
 
 ## License
 
-To be determined.
+MIT License - see [LICENSE](LICENSE) file for details.

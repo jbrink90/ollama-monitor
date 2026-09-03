@@ -603,7 +603,7 @@ export default function LargeWidget({
             </div>
           </div>
         </div>
-s
+        
         <div
           className="
             flex

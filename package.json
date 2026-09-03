@@ -3,6 +3,7 @@
   "private": true,
   "version": "1.0.0",
   "author": "jbrink90",
+  "license": "MIT",
   "type": "module",
   "packageManager": "npm@11.6.2",
   "scripts": {
