@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "author": "jbrink90",
   "type": "module",
-  "packageManager": "pnpm@10.30.1",
+  "packageManager": "npm@11.6.2",
   "scripts": {
     "dev:next": "next dev --turbopack",
     "dev:next:webpack": "next dev --webpack",
@@ -16,7 +16,11 @@
     "lint": "biome check",
     "fix": "biome check --write",
     "dev": "tauri dev",
-    "build": "tauri build"
+    "build": "tauri build",
+    "version:major": "node scripts/update-version.js major",
+    "version:minor": "node scripts/update-version.js minor",
+    "version:patch": "node scripts/update-version.js patch",
+    "version": "node scripts/update-version.js"
   },
   "dependencies": {
     "@tauri-apps/api": "^2.10.1",
