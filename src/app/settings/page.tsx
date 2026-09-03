@@ -2,6 +2,7 @@
 
 import { Minus, X } from "lucide-react";
 import { useState } from "react";
+import { getSettings, saveSettings } from "@/lib/settings";
 
 const refreshIntervalOptions = [
   { label: "1 second", value: 1000 },
@@ -13,72 +14,27 @@ const refreshIntervalOptions = [
   { label: "3 minutes", value: 180000 },
 ];
 
-const DEFAULT_REFRESH_INTERVAL = 5000;
-const DEFAULT_OLLAMA_INSTANCE = "http://127.0.0.1:11434";
-const DEFAULT_TOTAL_RAM = 32;
-const DEFAULT_TOTAL_VRAM = 12;
-const DEFAULT_SMALL_WIDGET = false;
-
+const initialSettings = getSettings();
+  
 export default function SettingsPage() {
-  const [refreshInterval, setRefreshInterval] = useState(() => {
-    if (typeof window === "undefined") {
-      return DEFAULT_REFRESH_INTERVAL;
-    }
 
-    const saved = localStorage.getItem("refreshInterval");
 
-    return saved
-      ? Number(saved)
-      : DEFAULT_REFRESH_INTERVAL;
-  });
+  const [refreshInterval, setRefreshInterval] =
+    useState(initialSettings.refreshInterval);
 
-  const [ollamaInstance, setOllamaInstance] = useState(() => {
-    if (typeof window === "undefined") {
-      return DEFAULT_OLLAMA_INSTANCE;
-    }
+  const [ollamaInstance, setOllamaInstance] =
+    useState(initialSettings.ollamaInstance);
 
-    const saved = localStorage.getItem("ollamaInstance");
+  const [totalRam, setTotalRam] =
+    useState(initialSettings.totalRam);
 
-    return saved || DEFAULT_OLLAMA_INSTANCE;
-  });
+  const [totalVram, setTotalVram] =
+    useState(initialSettings.totalVram);
 
-  const [totalRam, setTotalRam] = useState(() => {
-    if (typeof window === "undefined") {
-      return DEFAULT_TOTAL_RAM;
-    }
+  const [smallWidget, setSmallWidget] =
+    useState(initialSettings.smallWidget);
 
-    const saved = localStorage.getItem("totalRam");
 
-    return saved
-      ? Number(saved)
-      : DEFAULT_TOTAL_RAM;
-  });
-
-  const [totalVram, setTotalVram] = useState(() => {
-    if (typeof window === "undefined") {
-      return DEFAULT_TOTAL_VRAM;
-    }
-
-    const saved = localStorage.getItem("totalVram");
-
-    return saved
-      ? Number(saved)
-      : DEFAULT_TOTAL_VRAM;
-  });
-
-  const [smallWidget, setSmallWidget] = useState(() => {
-    if (typeof window === "undefined") {
-      return DEFAULT_SMALL_WIDGET;
-    }
-
-    const saved = localStorage.getItem("smallWidget");
-
-    if (saved === null) {
-      return DEFAULT_SMALL_WIDGET;
-    }
-
-    return saved === "true";
-  });
 
   const minimize = async () => {
     if (typeof window === "undefined") return;
@@ -128,43 +84,21 @@ export default function SettingsPage() {
     setSmallWidget(value);
   };
 
-  const saveSettings = async () => {
-    if (typeof window === "undefined") return;
-
-    localStorage.setItem(
-      "refreshInterval",
-      String(refreshInterval),
-    );
-
-    localStorage.setItem(
-      "ollamaInstance",
+  const handleSaveSettings = async () => {
+    const settings = {
+      refreshInterval,
       ollamaInstance,
-    );
+      totalRam,
+      totalVram,
+      smallWidget,
+    };
 
-    localStorage.setItem(
-      "totalRam",
-      String(totalRam),
-    );
-
-    localStorage.setItem(
-      "totalVram",
-      String(totalVram),
-    );
-
-    localStorage.setItem(
-      "smallWidget",
-      String(smallWidget),
-    );
+    saveSettings(settings);
 
     if ("__TAURI_INTERNALS__" in window) {
       const { emit } = await import("@tauri-apps/api/event");
-      await emit("settings-changed", {
-        refreshInterval,
-        ollamaInstance,
-        totalRam,
-        totalVram,
-        smallWidget,
-      });
+
+      await emit("settings-changed", settings);
     }
 
     await close();
@@ -472,7 +406,7 @@ export default function SettingsPage() {
           </div>
 
           <button
-            onClick={saveSettings}
+            onClick={handleSaveSettings}
             className="
               bg-blue-600
               hover:bg-blue-700
