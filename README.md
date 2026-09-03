@@ -75,11 +75,9 @@ Then restart Ollama Desktop completely.
 
 ## Roadmap
 
-- [ ] Real system telemetry (CPU/GPU utilization, temps)
-- [ ] Automatic hardware detection
-- [ ] Configurable polling intervals
-- [ ] System tray integration
-- [ ] Cross-platform polish (Windows/Linux/macOS)
+- [ ] System telemetry (CPU/GPU utilization, temps) via Rust backend
+- [ ] Light/Dark mode toggle
+- [ ] Model management (load/unload)
 
 ## License
 
