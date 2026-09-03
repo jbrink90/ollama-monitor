@@ -82,3 +82,7 @@ Then restart Ollama Desktop completely.
 ## License
 
 MIT License - see [LICENSE](LICENSE) file for details.
+
+## Attributions
+
+<a href="https://www.flaticon.com/free-icons/machine-learning">Icon created by alfanz - Flaticon</a>
