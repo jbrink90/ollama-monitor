@@ -10,47 +10,31 @@ import {
 } from "@/lib/ollama";
 import LargeWidget from "./LargeWidget";
 import SmallWidget from "./SmallWidget";
+import { getSettings } from "@/lib/settings";
 
 export default function MainWidget() {
   const [error, setError] = useState<string | null>(null);
   const [onTop, setOnTop] = useState(false);
 
-  const [smallWidget, setSmallWidget] = useState(() => {
-    if (typeof window === "undefined") {
-      return false;
-    }
-    const saved = localStorage.getItem("smallWidget");
-    if (saved === null) {
-      return false;
-    }
-    return saved === "true";
-  });
+
+  const [smallWidget, setSmallWidget] =
+    useState(false);
+
+  const [refreshInterval, setRefreshInterval] =
+    useState(5000);
+
+  const [totalRam, setTotalRam] =
+    useState(32);
+
+  const [totalVram, setTotalVram] =
+    useState(12);
+
+
+
+
+
 
   const [modelList, setModelList] = useState<OllamaPsModel[]>([]);
-  const [refreshInterval, setRefreshInterval] = useState(() => {
-    if (typeof window === "undefined") {
-      return 5000;
-    }
-    const saved = localStorage.getItem("refreshInterval");
-    return saved ? Number(saved) : 5000;
-  });
-
-  const [totalRam, setTotalRam] = useState(() => {
-    if (typeof window === "undefined") {
-      return 32;
-    }
-    const saved = localStorage.getItem("totalRam");
-    return saved ? Number(saved) : 32;
-  });
-
-  const [totalVram, setTotalVram] = useState(() => {
-    if (typeof window === "undefined") {
-      return 12;
-    }
-    const saved = localStorage.getItem("totalVram");
-    return saved ? Number(saved) : 12;
-  });
-
   const totalVramBytes = totalVram * 1024 ** 3;
   const totalRamBytes = totalRam * 1024 ** 3;
   const [gpuStats, setGpuStats] = useState({
@@ -86,6 +70,19 @@ export default function MainWidget() {
   useEffect(() => {
     resizeWindow(smallWidget);
   }, [smallWidget, resizeWindow]);
+
+  const loadSettings = useCallback(() => {
+    const settings = getSettings();
+
+    setSmallWidget(settings.smallWidget);
+    setRefreshInterval(settings.refreshInterval);
+    setTotalRam(settings.totalRam);
+    setTotalVram(settings.totalVram);
+  }, []);
+
+  useEffect(() => {
+    loadSettings();
+  }, [loadSettings]);
 
   const refresh = useCallback(async () => {
     console.log("Refreshing Ollama models");
@@ -194,7 +191,7 @@ export default function MainWidget() {
   }, [onTop]);
 
   useEffect(() => {
-      resizeWindow(smallWidget);
+    resizeWindow(smallWidget);
   }, [smallWidget, resizeWindow]);
 
   useEffect(() => {
@@ -214,87 +211,34 @@ export default function MainWidget() {
   ]);
 
   useEffect(() => {
-    if (typeof window === "undefined") {
-      return;
-    }
+    const handleStorageChange = (event: StorageEvent) => {
+      if (event.storageArea === localStorage) {
+        const { key, newValue } = event;
 
-    if (!("__TAURI_INTERNALS__" in window)) {
-      return;
-    }
-
-    let unlisten:
-      | (() => void)
-      | undefined;
-
-    const setupListener = async () => {
-      const { listen } = await import("@tauri-apps/api/event");
-      unlisten = await listen(
-        "settings-changed",
-        (event) => {
-          const payload =
-            event.payload as {
-              refreshInterval?: number;
-              ollamaInstance?: string;
-              totalRam?: number;
-              totalVram?: number;
-              smallWidget?: boolean;
-            };
-
-          console.log(
-            "Settings changed:",
-            payload,
-          );
-
-          if (
-            payload.refreshInterval !==
-            undefined
-          ) {
-            setRefreshInterval(
-              payload.refreshInterval,
-            );
-          }
-
-          if (
-            payload.totalRam !== undefined
-          ) {
-            setTotalRam(
-              payload.totalRam,
-            );
-          }
-
-          if (
-            payload.totalVram !== undefined
-          ) {
-            setTotalVram(
-              payload.totalVram,
-            );
-          }
-
-          if (
-            payload.smallWidget !==
-            undefined
-          ) {
-            setSmallWidget(
-              payload.smallWidget,
-            );
-          }
-
-          if (
-            payload.ollamaInstance !==
-            undefined
-          ) {
-            refresh();
-          }
-        },
-      );
+        if (key === "refreshInterval") {
+          setRefreshInterval(Number(newValue));
+        } else if (key === "totalRam") {
+          setTotalRam(Number(newValue));
+        } else if (key === "totalVram") {
+          setTotalVram(Number(newValue));
+        } else if (key === "smallWidget") {
+          setSmallWidget(newValue === "true");
+        }
+      }
     };
 
-    setupListener();
+    window.addEventListener(
+      "storage",
+      handleStorageChange,
+    );
 
     return () => {
-      unlisten?.();
+      window.removeEventListener(
+        "storage",
+        handleStorageChange,
+      );
     };
-  }, [refresh]);
+  }, []);
 
   if (smallWidget) {
     return (

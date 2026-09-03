@@ -1,7 +1,7 @@
 "use client";
 
 import { Minus, X } from "lucide-react";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { getSettings, saveSettings } from "@/lib/settings";
 
 const refreshIntervalOptions = [
@@ -14,26 +14,45 @@ const refreshIntervalOptions = [
   { label: "3 minutes", value: 180000 },
 ];
 
-const initialSettings = getSettings();
-  
+ 
 export default function SettingsPage() {
-
-
   const [refreshInterval, setRefreshInterval] =
-    useState(initialSettings.refreshInterval);
+    useState(5000);
 
   const [ollamaInstance, setOllamaInstance] =
-    useState(initialSettings.ollamaInstance);
+    useState("http://127.0.0.1:11434");
 
   const [totalRam, setTotalRam] =
-    useState(initialSettings.totalRam);
+    useState(32);
 
   const [totalVram, setTotalVram] =
-    useState(initialSettings.totalVram);
+    useState(12);
 
   const [smallWidget, setSmallWidget] =
-    useState(initialSettings.smallWidget);
+    useState(false);
 
+  const loadSettings = useCallback(() => {
+    const settings = getSettings();
+
+    setRefreshInterval(settings.refreshInterval);
+    setOllamaInstance(settings.ollamaInstance);
+    setTotalRam(settings.totalRam);
+    setTotalVram(settings.totalVram);
+    setSmallWidget(settings.smallWidget);
+  }, []);
+
+  useEffect(() => {
+    loadSettings();
+
+    window.addEventListener("focus", loadSettings);
+
+    return () => {
+      window.removeEventListener(
+        "focus",
+        loadSettings,
+      );
+    };
+  }, [loadSettings]);
 
 
   const minimize = async () => {
@@ -94,13 +113,6 @@ export default function SettingsPage() {
     };
 
     saveSettings(settings);
-
-    if ("__TAURI_INTERNALS__" in window) {
-      const { emit } = await import("@tauri-apps/api/event");
-
-      await emit("settings-changed", settings);
-    }
-
     await close();
   };
 
