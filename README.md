@@ -85,4 +85,5 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Attributions
 
-<a href="https://www.flaticon.com/free-icons/machine-learning">Icon created by alfanz - Flaticon</a>
+Icon created by <a href="https://www.flaticon.com/free-icons/machine-learning">alfanz - Flaticon</a>
+Thank you to kvnxiao for the <a href="https://github.com/kvnxiao/tauri-nextjs-template">Tauri Next.js template</a>
