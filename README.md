@@ -1,6 +1,6 @@
 # Ollama Monitor
 
-A lightweight desktop dashboard for monitoring locally running [Ollama](https://ollama.com/) models. Built with Tauri + Next.js.
+A lightweight, cross-platform web or desktop dashboard for monitoring locally running [Ollama](https://ollama.com/) models. Built with Tauri + Next.js.
 
 <p align="center">
   <img src="https://github.com/jbrink90/ollama-model-monitor/blob/main/screenshots/main.png?raw=true" alt="Main Dashboard" />
