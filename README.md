@@ -114,9 +114,9 @@ node scripts/update-version.js 1.2.3
 
 Use the version types according to Semantic Versioning:
 
-Major — breaking or incompatible changes (1.0.0 → 2.0.0)
-Minor — new backwards-compatible functionality (1.0.0 → 1.1.0)
-Patch — backwards-compatible bug fixes (1.0.0 → 1.0.1)
+- **Major** — breaking or incompatible changes (1.0.0 → 2.0.0)
+- **Minor** — new backwards-compatible functionality (1.0.0 → 1.1.0)
+- **Patch** — backwards-compatible bug fixes (1.0.0 → 1.0.1)
 
 
 ## Recommended release workflow
