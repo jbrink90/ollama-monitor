@@ -54,8 +54,96 @@ Or change settings via the settings window (⚙ icon) after the app loads.
 
 ## Build
 
+To build the Tauri application for desktop:
+
 ```bash
-npm run tauri build
+npm run build
+```
+
+This runs tauri build and creates the platform-specific application bundles/installers.
+
+If you only need to build the Next.js application for web use, use:
+
+```bash
+npm run build:next
+```
+
+To build the Next.js application using Webpack instead of Turbopack:
+
+```bash
+npm run build:next:webpack
+```
+
+## Versioning
+
+Application versions should be updated using the provided versioning scripts rather than manually editing version files, as this ensures consistency across all version files.
+
+### Bump the version
+
+The version bump should be completed before running the build so that the generated application is built with the intended release version.
+
+For a major release:
+
+```bash
+npm run version:major
+```
+
+For a minor release:
+
+```bash
+npm run version:minor
+```
+
+For a patch release:
+
+```bash
+npm run version:patch
+```
+
+To view the current version:
+
+```bash
+npm run version:current
+```
+
+To manually set a specific version:
+
+```bash
+node scripts/update-version.js 1.2.3
+```
+
+Use the version types according to Semantic Versioning:
+
+Major — breaking or incompatible changes (1.0.0 → 2.0.0)
+Minor — new backwards-compatible functionality (1.0.0 → 1.1.0)
+Patch — backwards-compatible bug fixes (1.0.0 → 1.0.1)
+
+
+## Recommended release workflow
+
+1. Make and test your changes:
+
+```bash
+npm test
+npm run lint
+```
+
+2. Bump the version:
+
+```bash
+npm run version:patch
+```
+
+Use **version:minor** or **version:major** when appropriate.
+
+3. Review the version changes and commit them.
+
+4. Build the application:
+
+```bash
+npm run build ## Desktop build
+or 
+npm run build:next ## Web build
 ```
 
 ## Important Notes
