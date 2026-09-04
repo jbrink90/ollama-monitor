@@ -168,6 +168,7 @@ export default function LargeWidget({
           </button>
 
           <button
+            type="button"
             className={`
               cursor-pointer
               ${

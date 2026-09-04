@@ -117,12 +117,16 @@ export default function MainWidget() {
     [],
   );
 
+  const toggleOnTop = useCallback(() => {
+    setOnTop((previous) => !previous);
+  }, []);
+
   useEffect(() => {
     if (!settingsLoaded) {
       return;
     }
 
-    resizeWindow(smallWidget);
+    void resizeWindow(smallWidget);
   }, [
     settingsLoaded,
     smallWidget,
@@ -274,7 +278,7 @@ export default function MainWidget() {
           .setAlwaysOnTop(onTop);
       };
 
-    setAlwaysOnTop();
+    void setAlwaysOnTop();
   }, [onTop]);
 
   useEffect(() => {
@@ -282,7 +286,7 @@ export default function MainWidget() {
       return;
     }
 
-    refresh();
+    void refresh();
 
     const timer = setInterval(
       refresh,
@@ -345,11 +349,7 @@ export default function MainWidget() {
         cpuStats={cpuStats}
         ollamaUrl={getOllamaUrl()}
         onTop={onTop}
-        onToggleOnTop={() =>
-          setOnTop(
-            (previous) => !previous,
-          )
-        }
+        onToggleOnTop={toggleOnTop}
         onSettings={openSettings}
         onMinimize={minimize}
         onClose={close}
@@ -364,11 +364,7 @@ export default function MainWidget() {
       gpuStats={gpuStats}
       cpuStats={cpuStats}
       onTop={onTop}
-      onToggleOnTop={() =>
-        setOnTop(
-          (previous) => !previous,
-        )
-      }
+      onToggleOnTop={toggleOnTop}
       onRefresh={refresh}
       onSettings={openSettings}
       onMinimize={minimize}

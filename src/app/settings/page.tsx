@@ -14,7 +14,6 @@ const refreshIntervalOptions = [
   { label: "3 minutes", value: 180000 },
 ];
 
- 
 export default function SettingsPage() {
   const [refreshInterval, setRefreshInterval] =
     useState(5000);
@@ -44,7 +43,10 @@ export default function SettingsPage() {
   useEffect(() => {
     loadSettings();
 
-    window.addEventListener("focus", loadSettings);
+    window.addEventListener(
+      "focus",
+      loadSettings,
+    );
 
     return () => {
       window.removeEventListener(
@@ -54,15 +56,23 @@ export default function SettingsPage() {
     };
   }, [loadSettings]);
 
-
   const minimize = async () => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined") {
+      return;
+    }
 
-    if (!("__TAURI_INTERNALS__" in window)) return;
+    if (!("__TAURI_INTERNALS__" in window)) {
+      return;
+    }
 
-    const { WebviewWindow } = await import("@tauri-apps/api/webviewWindow");
+    const { WebviewWindow } = await import(
+      "@tauri-apps/api/webviewWindow"
+    );
+
     const settingsWindow =
-      await WebviewWindow.getByLabel("settings");
+      await WebviewWindow.getByLabel(
+        "settings",
+      );
 
     if (settingsWindow) {
       await settingsWindow.minimize();
@@ -70,37 +80,32 @@ export default function SettingsPage() {
   };
 
   const close = async () => {
-    if (typeof window === "undefined") return;
+    if (typeof window === "undefined") {
+      return;
+    }
 
-    if (!("__TAURI_INTERNALS__" in window)) return;
+    if (!("__TAURI_INTERNALS__" in window)) {
+      return;
+    }
 
-    const { WebviewWindow } = await import("@tauri-apps/api/webviewWindow");
+    const { WebviewWindow } = await import(
+      "@tauri-apps/api/webviewWindow"
+    );
+
     const settingsWindow =
-      await WebviewWindow.getByLabel("settings");
+      await WebviewWindow.getByLabel(
+        "settings",
+      );
 
     if (settingsWindow) {
       await settingsWindow.hide();
     }
   };
 
-  const changeRefreshInterval = (value: number) => {
-    setRefreshInterval(value);
-  };
-
-  const changeOllamaInstance = (value: string) => {
-    setOllamaInstance(value);
-  };
-
-  const changeTotalRam = (value: number) => {
-    setTotalRam(value);
-  };
-
-  const changeTotalVram = (value: number) => {
-    setTotalVram(value);
-  };
-
-  const changeSmallWidget = (value: boolean) => {
-    setSmallWidget(value);
+  const handleSmallWidgetClick = () => {
+    setSmallWidget(
+      (previous) => !previous,
+    );
   };
 
   const handleSaveSettings = async () => {
@@ -113,6 +118,7 @@ export default function SettingsPage() {
     };
 
     saveSettings(settings);
+
     await close();
   };
 
@@ -130,7 +136,6 @@ export default function SettingsPage() {
         text-white
       "
     >
-
       <header
         data-tauri-drag-region
         className="
@@ -172,6 +177,7 @@ export default function SettingsPage() {
           "
         >
           <button
+            type="button"
             className="cursor-pointer"
             onClick={minimize}
             aria-label="Minimize"
@@ -180,6 +186,7 @@ export default function SettingsPage() {
           </button>
 
           <button
+            type="button"
             className="cursor-pointer"
             onClick={close}
             aria-label="Close"
@@ -198,9 +205,10 @@ export default function SettingsPage() {
       >
         <div className="flex flex-col gap-6">
 
+          {/* Widget Layout */}
           <div className="flex flex-col gap-3">
             <div>
-              <label className="text-lg font-medium">
+              <label className="text-lg font-medium" htmlFor="widgetLayout">
                 Widget Layout
               </label>
 
@@ -222,15 +230,13 @@ export default function SettingsPage() {
                 p-4
               "
             >
-                <span className="font-medium">
-                  Small Widget
-                </span>
+              <span className="font-medium">
+                Small Widget
+              </span>
 
               <button
                 type="button"
-                onClick={() =>
-                  changeSmallWidget(!smallWidget)
-                }
+                onClick={handleSmallWidgetClick}
                 className={`
                   relative
                   w-14
@@ -269,15 +275,16 @@ export default function SettingsPage() {
             </div>
           </div>
 
+          {/* Refresh Interval */}
           <div className="flex flex-col gap-2">
-            <label className="text-lg font-medium">
+            <label className="text-lg font-medium" htmlFor="refreshInterval">
               Refresh Interval
             </label>
 
             <select
               value={refreshInterval}
               onChange={(e) =>
-                changeRefreshInterval(
+                setRefreshInterval(
                   Number(e.target.value),
                 )
               }
@@ -306,9 +313,9 @@ export default function SettingsPage() {
             </select>
           </div>
 
-
+          {/* Ollama Instance */}
           <div className="flex flex-col gap-2">
-            <label className="text-lg font-medium">
+            <label className="text-lg font-medium" htmlFor="ollamaInstance">
               Ollama Instance URL
             </label>
 
@@ -316,7 +323,7 @@ export default function SettingsPage() {
               type="text"
               value={ollamaInstance}
               onChange={(e) =>
-                changeOllamaInstance(
+                setOllamaInstance(
                   e.target.value,
                 )
               }
@@ -335,15 +342,12 @@ export default function SettingsPage() {
             />
           </div>
 
-
           <div className="flex flex-col gap-2">
-            <label className="text-lg font-medium">
+            <label className="text-lg font-medium" htmlFor="systemMemory">
               System Memory (GB)
             </label>
 
             <div className="flex gap-4">
-
-
               <div
                 className="
                   flex-1
@@ -352,7 +356,7 @@ export default function SettingsPage() {
                   gap-2
                 "
               >
-                <label className="text-sm text-white/70">
+                <label className="text-sm text-white/70" htmlFor="memory">
                   Total RAM
                 </label>
 
@@ -361,7 +365,7 @@ export default function SettingsPage() {
                   min="1"
                   value={totalRam}
                   onChange={(e) =>
-                    changeTotalRam(
+                    setTotalRam(
                       Number(e.target.value),
                     )
                   }
@@ -379,7 +383,6 @@ export default function SettingsPage() {
                 />
               </div>
 
-
               <div
                 className="
                   flex-1
@@ -388,7 +391,7 @@ export default function SettingsPage() {
                   gap-2
                 "
               >
-                <label className="text-sm text-white/70">
+                <label className="text-sm text-white/70" htmlFor="vMemory">
                   Total VRAM
                 </label>
 
@@ -397,7 +400,7 @@ export default function SettingsPage() {
                   min="1"
                   value={totalVram}
                   onChange={(e) =>
-                    changeTotalVram(
+                    setTotalVram(
                       Number(e.target.value),
                     )
                   }
@@ -418,6 +421,7 @@ export default function SettingsPage() {
           </div>
 
           <button
+            type="button"
             onClick={handleSaveSettings}
             className="
               bg-blue-600
