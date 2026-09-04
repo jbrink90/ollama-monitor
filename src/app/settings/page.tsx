@@ -15,20 +15,17 @@ const refreshIntervalOptions = [
 ];
 
 export default function SettingsPage() {
-  const [refreshInterval, setRefreshInterval] =
-    useState(5000);
+  const [refreshInterval, setRefreshInterval] = useState(5000);
 
-  const [ollamaInstance, setOllamaInstance] =
-    useState("http://127.0.0.1:11434");
+  const [ollamaInstance, setOllamaInstance] = useState(
+    "http://127.0.0.1:11434",
+  );
 
-  const [totalRam, setTotalRam] =
-    useState(32);
+  const [totalRam, setTotalRam] = useState(32);
 
-  const [totalVram, setTotalVram] =
-    useState(12);
+  const [totalVram, setTotalVram] = useState(12);
 
-  const [smallWidget, setSmallWidget] =
-    useState(false);
+  const [smallWidget, setSmallWidget] = useState(false);
 
   const loadSettings = useCallback(() => {
     const settings = getSettings();
@@ -43,16 +40,10 @@ export default function SettingsPage() {
   useEffect(() => {
     loadSettings();
 
-    window.addEventListener(
-      "focus",
-      loadSettings,
-    );
+    window.addEventListener("focus", loadSettings);
 
     return () => {
-      window.removeEventListener(
-        "focus",
-        loadSettings,
-      );
+      window.removeEventListener("focus", loadSettings);
     };
   }, [loadSettings]);
 
@@ -65,14 +56,9 @@ export default function SettingsPage() {
       return;
     }
 
-    const { WebviewWindow } = await import(
-      "@tauri-apps/api/webviewWindow"
-    );
+    const { WebviewWindow } = await import("@tauri-apps/api/webviewWindow");
 
-    const settingsWindow =
-      await WebviewWindow.getByLabel(
-        "settings",
-      );
+    const settingsWindow = await WebviewWindow.getByLabel("settings");
 
     if (settingsWindow) {
       await settingsWindow.minimize();
@@ -88,14 +74,9 @@ export default function SettingsPage() {
       return;
     }
 
-    const { WebviewWindow } = await import(
-      "@tauri-apps/api/webviewWindow"
-    );
+    const { WebviewWindow } = await import("@tauri-apps/api/webviewWindow");
 
-    const settingsWindow =
-      await WebviewWindow.getByLabel(
-        "settings",
-      );
+    const settingsWindow = await WebviewWindow.getByLabel("settings");
 
     if (settingsWindow) {
       await settingsWindow.hide();
@@ -103,9 +84,7 @@ export default function SettingsPage() {
   };
 
   const handleSmallWidgetClick = () => {
-    setSmallWidget(
-      (previous) => !previous,
-    );
+    setSmallWidget((previous) => !previous);
   };
 
   const handleSaveSettings = async () => {
@@ -160,9 +139,7 @@ export default function SettingsPage() {
             select-none
           "
         >
-          <h1 className="text-3xl">
-            Settings
-          </h1>
+          <h1 className="text-3xl">Settings</h1>
         </div>
 
         <div
@@ -204,7 +181,6 @@ export default function SettingsPage() {
         "
       >
         <div className="flex flex-col gap-6">
-
           {/* Widget Layout */}
           <div className="flex flex-col gap-3">
             <div>
@@ -213,8 +189,7 @@ export default function SettingsPage() {
               </label>
 
               <p className="text-sm text-white/50 mt-1">
-                Choose between the full dashboard
-                and a compact widget.
+                Choose between the full dashboard and a compact widget.
               </p>
             </div>
 
@@ -230,9 +205,7 @@ export default function SettingsPage() {
                 p-4
               "
             >
-              <span className="font-medium">
-                Small Widget
-              </span>
+              <span className="font-medium">Small Widget</span>
 
               <button
                 type="button"
@@ -244,11 +217,7 @@ export default function SettingsPage() {
                   rounded-full
                   transition-colors
                   cursor-pointer
-                  ${
-                    smallWidget
-                      ? "bg-blue-600"
-                      : "bg-gray-600"
-                  }
+                  ${smallWidget ? "bg-blue-600" : "bg-gray-600"}
                 `}
                 aria-label="Toggle small widget"
                 aria-pressed={smallWidget}
@@ -264,11 +233,7 @@ export default function SettingsPage() {
                     rounded-full
                     shadow-md
                     transition-transform
-                    ${
-                      smallWidget
-                        ? "translate-x-7"
-                        : "translate-x-0"
-                    }
+                    ${smallWidget ? "translate-x-7" : "translate-x-0"}
                   `}
                 />
               </button>
@@ -283,11 +248,7 @@ export default function SettingsPage() {
 
             <select
               value={refreshInterval}
-              onChange={(e) =>
-                setRefreshInterval(
-                  Number(e.target.value),
-                )
-              }
+              onChange={(e) => setRefreshInterval(Number(e.target.value))}
               className="
                 bg-[#1a2a3a]
                 border
@@ -300,16 +261,11 @@ export default function SettingsPage() {
                 focus:ring-blue-500
               "
             >
-              {refreshIntervalOptions.map(
-                (option) => (
-                  <option
-                    key={option.value}
-                    value={option.value}
-                  >
-                    {option.label}
-                  </option>
-                ),
-              )}
+              {refreshIntervalOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -322,11 +278,7 @@ export default function SettingsPage() {
             <input
               type="text"
               value={ollamaInstance}
-              onChange={(e) =>
-                setOllamaInstance(
-                  e.target.value,
-                )
-              }
+              onChange={(e) => setOllamaInstance(e.target.value)}
               placeholder="http://127.0.0.1:11434"
               className="
                 bg-[#1a2a3a]
@@ -364,11 +316,7 @@ export default function SettingsPage() {
                   type="number"
                   min="1"
                   value={totalRam}
-                  onChange={(e) =>
-                    setTotalRam(
-                      Number(e.target.value),
-                    )
-                  }
+                  onChange={(e) => setTotalRam(Number(e.target.value))}
                   className="
                     bg-[#1a2a3a]
                     border
@@ -399,11 +347,7 @@ export default function SettingsPage() {
                   type="number"
                   min="1"
                   value={totalVram}
-                  onChange={(e) =>
-                    setTotalVram(
-                      Number(e.target.value),
-                    )
-                  }
+                  onChange={(e) => setTotalVram(Number(e.target.value))}
                   className="
                     bg-[#1a2a3a]
                     border

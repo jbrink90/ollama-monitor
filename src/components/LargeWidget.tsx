@@ -59,11 +59,9 @@ export default function LargeWidget({
   onMinimize,
   onClose,
 }: LargeWidgetProps) {
-  const loadedModelCount =
-    modelList.filter(
-      (model) =>
-        model.status === "Loaded",
-    ).length;
+  const loadedModelCount = modelList.filter(
+    (model) => model.status === "Loaded",
+  ).length;
 
   return (
     <main
@@ -139,9 +137,8 @@ export default function LargeWidget({
                 text-lg
               "
             >
-              {loadedModelCount} {loadedModelCount === 1
-                ? "model"
-                : "models"} loaded
+              {loadedModelCount} {loadedModelCount === 1 ? "model" : "models"}{" "}
+              loaded
             </span>
           </div>
         </div>
@@ -171,11 +168,7 @@ export default function LargeWidget({
             type="button"
             className={`
               cursor-pointer
-              ${
-                onTop
-                  ? "text-blue-400"
-                  : ""
-              }
+              ${onTop ? "text-blue-400" : ""}
             `}
             onClick={onToggleOnTop}
             aria-label="Always on top"
@@ -223,9 +216,7 @@ export default function LargeWidget({
         "
       >
         {Boolean(error) && (
-          <div className="text-red-400 px-4 pt-2">
-            {error}
-          </div>
+          <div className="text-red-400 px-4 pt-2">{error}</div>
         )}
 
         <div
@@ -247,21 +238,13 @@ export default function LargeWidget({
               text-white/50
             "
           >
-            <div className="text-left pl-4">
-              MODEL
-            </div>
+            <div className="text-left pl-4">MODEL</div>
 
-            <div>
-              STATUS
-            </div>
+            <div>STATUS</div>
 
-            <div>
-              GPU USAGE
-            </div>
+            <div>GPU USAGE</div>
 
-            <div>
-              CPU USAGE
-            </div>
+            <div>CPU USAGE</div>
           </div>
         </div>
 
@@ -283,21 +266,17 @@ export default function LargeWidget({
               px-4
             "
           >
-            {modelList.map(
-              (model) => {
-                const processorSplit =
-                  getProcessorSplit(model);
+            {modelList.map((model) => {
+              const processorSplit = getProcessorSplit(model);
 
-                const modelName =
-                  model.name.slice(
-                    model.name.lastIndexOf("/") +
-                      1,
-                  );
+              const modelName = model.name.slice(
+                model.name.lastIndexOf("/") + 1,
+              );
 
-                return (
-                  <div
-                    key={model.name}
-                    className="
+              return (
+                <div
+                  key={model.name}
+                  className="
                       grid
                       grid-cols-[2fr_1fr_1fr_1fr]
                       text-center
@@ -305,221 +284,194 @@ export default function LargeWidget({
                       border-b
                       border-white/5
                     "
-                  >
-                    <div
-                      className="
+                >
+                  <div
+                    className="
                         flex
                         flex-row
                         pl-4
                         py-4
                       "
-                    >
-                      <div
-                        className="
+                  >
+                    <div
+                      className="
                           flex
                           items-center
                           w-14
                         "
-                      >
-                        <Image
-                          src={
-                            getModelBrand(
-                              model.name,
-                            ).icon
-                          }
-                          width={56}
-                          height={56}
-                          alt={modelName}
-                          className="
+                    >
+                      <Image
+                        src={getModelBrand(model.name).icon}
+                        width={56}
+                        height={56}
+                        alt={modelName}
+                        className="
                             w-14
                             h-14
                             select-none
                           "
-                          priority
-                        />
-                      </div>
+                        priority
+                      />
+                    </div>
 
-                      <div
-                        className="
+                    <div
+                      className="
                           flex
                           justify-center
                           flex-col
                           pl-8
                           items-center
                         "
-                      >
-                        <span
-                          className={`
+                    >
+                      <span
+                        className={`
                             flex
                             ${inter.variable}
                             text-xl
                           `}
-                        >
-                          {modelName}
-                        </span>
+                      >
+                        {modelName}
+                      </span>
 
-                        <span
-                          className={`
+                      <span
+                        className={`
                             flex
                             ${inter.variable}
                             text-md
                             text-white/50
                             justify-center
                           `}
-                        >
-                          {model.details.parameter_size} Parameters
-                        </span>
-                      </div>
+                      >
+                        {model.details.parameter_size} Parameters
+                      </span>
                     </div>
-                    <div
-                      className="
+                  </div>
+                  <div
+                    className="
                         py-4
                         flex
                         flex-col
                       "
-                    >
-                      <div
-                        className="
+                  >
+                    <div
+                      className="
                           flex
                           items-center
                           justify-center
                           gap-2
                         "
-                      >
-                        <span
-                          className={`
+                    >
+                      <span
+                        className={`
                             h-2.5
                             w-2.5
                             rounded-full
                             inline-block
                             ${
-                              model.status ===
-                              "Loaded"
+                              model.status === "Loaded"
                                 ? "bg-green-500"
                                 : "bg-white/30"
                             }
                           `}
-                        />
+                      />
 
-                        <span className="text-lg">
-                          {model.status}
-                        </span>
-                      </div>
+                      <span className="text-lg">{model.status}</span>
+                    </div>
 
-                      <div
-                        className="
+                    <div
+                      className="
                           flex
                           items-center
                           justify-center
                           gap-2
                         "
-                      >
-                        <div
-                          className="
+                    >
+                      <div
+                        className="
                             flex
                             flex-col
                             items-center
                           "
-                        >
-                          {model.status ===
-                          "Loaded" ? (
-                            <>
-                              <span
-                                className="
+                      >
+                        {model.status === "Loaded" ? (
+                          <>
+                            <span
+                              className="
                                   flex
                                   text-white/30
                                   text-md
                                 "
-                              >
-                                Context: {model.context_length}
-                              </span>
+                            >
+                              Context: {model.context_length}
+                            </span>
 
-                              <span
-                                className="
+                            <span
+                              className="
                                   flex
                                   text-xs
                                   text-white/50
                                 "
-                              >
-                                Expires: {getRelativeExpiration(
-                                  model.expires_at,
-                                )}
-                              </span>
-                            </>
-                          ) : null}
-                        </div>
+                            >
+                              Expires: {getRelativeExpiration(model.expires_at)}
+                            </span>
+                          </>
+                        ) : null}
                       </div>
                     </div>
-
-                    <div
-                      className="
-                        flex
-                        flex-col
-                        items-center
-                        text-white/50
-                        text-md
-                        gap-0
-                      "
-                    >
-                      {model.status ===
-                      "Loaded" ? (
-                        <>
-                          <RadialChart
-                            value={
-                              processorSplit.gpu
-                            }
-                            color="#22c55e"
-                            size={100}
-                          />
-
-                          <span>
-                            {(
-                              gpuStats.used /
-                              1024 /
-                              1024 /
-                              1024
-                            ).toFixed(1)} GB
-                          </span>
-                        </>
-                      ) : null}
-                    </div>
-
-                    <div
-                      className="
-                        flex
-                        flex-col
-                        items-center
-                        text-white/50
-                        text-md
-                        gap-0
-                      "
-                    >
-                      {model.status ===
-                      "Loaded" ? (
-                        <>
-                          <RadialChart
-                            value={
-                              processorSplit.cpu
-                            }
-                            color="#3b82f6"
-                            size={100}
-                          />
-
-                          <span>
-                            {(
-                              cpuStats.used /
-                              1024 /
-                              1024 /
-                              1024
-                            ).toFixed(1)} GB
-                          </span>
-                        </>
-                      ) : null}
-                    </div>
                   </div>
-                );
-              },
-            )}
+
+                  <div
+                    className="
+                        flex
+                        flex-col
+                        items-center
+                        text-white/50
+                        text-md
+                        gap-0
+                      "
+                  >
+                    {model.status === "Loaded" ? (
+                      <>
+                        <RadialChart
+                          value={processorSplit.gpu}
+                          color="#22c55e"
+                          size={100}
+                        />
+
+                        <span>
+                          {(gpuStats.used / 1024 / 1024 / 1024).toFixed(1)} GB
+                        </span>
+                      </>
+                    ) : null}
+                  </div>
+
+                  <div
+                    className="
+                        flex
+                        flex-col
+                        items-center
+                        text-white/50
+                        text-md
+                        gap-0
+                      "
+                  >
+                    {model.status === "Loaded" ? (
+                      <>
+                        <RadialChart
+                          value={processorSplit.cpu}
+                          color="#3b82f6"
+                          size={100}
+                        />
+
+                        <span>
+                          {(cpuStats.used / 1024 / 1024 / 1024).toFixed(1)} GB
+                        </span>
+                      </>
+                    ) : null}
+                  </div>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>
@@ -563,9 +515,7 @@ export default function LargeWidget({
             "
           >
             <div className="flex flex-col">
-              <div className="flex text-lg">
-                GPU
-              </div>
+              <div className="flex text-lg">GPU</div>
 
               <div
                 className="
@@ -580,10 +530,7 @@ export default function LargeWidget({
 
             <div className="flex flex-col">
               <div className="flex text-2xl">
-                {gpuStats.percentage.toFixed(
-                  0,
-                )}
-                %
+                {gpuStats.percentage.toFixed(0)}%
               </div>
 
               <div
@@ -593,22 +540,13 @@ export default function LargeWidget({
                   text-white/50
                 "
               >
-                {(
-                  gpuStats.used /
-                  1024 /
-                  1024 /
-                  1024
-                ).toFixed(1)} GB / {(
-                  gpuStats.total /
-                  1024 /
-                  1024 /
-                  1024
-                ).toFixed(0)} GB
+                {(gpuStats.used / 1024 / 1024 / 1024).toFixed(1)} GB /{" "}
+                {(gpuStats.total / 1024 / 1024 / 1024).toFixed(0)} GB
               </div>
             </div>
           </div>
         </div>
-        
+
         <div
           className="
             flex
@@ -637,9 +575,7 @@ export default function LargeWidget({
             "
           >
             <div className="flex flex-col">
-              <div className="flex text-lg">
-                PC
-              </div>
+              <div className="flex text-lg">PC</div>
 
               <div
                 className="
@@ -654,10 +590,7 @@ export default function LargeWidget({
 
             <div className="flex flex-col">
               <div className="flex text-2xl">
-                {cpuStats.percentage.toFixed(
-                  0,
-                )}
-                %
+                {cpuStats.percentage.toFixed(0)}%
               </div>
 
               <div
@@ -667,17 +600,8 @@ export default function LargeWidget({
                   text-white/50
                 "
               >
-                {(
-                  cpuStats.used /
-                  1024 /
-                  1024 /
-                  1024
-                ).toFixed(1)} GB / {(
-                  cpuStats.total /
-                  1024 /
-                  1024 /
-                  1024
-                ).toFixed(0)} GB
+                {(cpuStats.used / 1024 / 1024 / 1024).toFixed(1)} GB /{" "}
+                {(cpuStats.total / 1024 / 1024 / 1024).toFixed(0)} GB
               </div>
             </div>
           </div>

@@ -11,10 +11,7 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import { getModelBrand } from "@/lib/ModelImageProvider";
-import {
-  getProcessorSplit,
-  type OllamaPsModel,
-} from "@/lib/ollama";
+import { getProcessorSplit, type OllamaPsModel } from "@/lib/ollama";
 
 interface ProcessorStats {
   used: number;
@@ -44,19 +41,12 @@ export default function SmallWidget({
   onMinimize,
   onClose,
 }: SmallWidgetProps) {
-
-  const loadedModels =
-    modelList.filter(
-      (model) =>
-        model.status === "Loaded",
-    );
+  const loadedModels = modelList.filter((model) => model.status === "Loaded");
 
   const primaryModel = loadedModels[0];
 
   const additionalModelCount =
-    loadedModels.length > 1
-      ? loadedModels.length - 1
-      : 0;
+    loadedModels.length > 1 ? loadedModels.length - 1 : 0;
 
   if (!primaryModel) {
     return (
@@ -82,7 +72,6 @@ export default function SmallWidget({
             border-white/15
           "
         >
-
           <header
             data-tauri-drag-region
             className="
@@ -156,9 +145,7 @@ export default function SmallWidget({
                     "
                   />
 
-                  <span>
-                    0 models loaded
-                  </span>
+                  <span>0 models loaded</span>
                 </div>
               </div>
             </div>
@@ -178,9 +165,10 @@ export default function SmallWidget({
                   rounded-lg
                   transition-colors
                   cursor-pointer
-                  ${onTop
-                    ? "text-blue-400"
-                    : "text-white/50 hover:text-white hover:bg-white/10"
+                  ${
+                    onTop
+                      ? "text-blue-400"
+                      : "text-white/50 hover:text-white hover:bg-white/10"
                   }
                 `}
                 aria-label="Always on top"
@@ -254,10 +242,8 @@ export default function SmallWidget({
               text-white/40
             "
           >
-
-                No models loaded
-            </div>
-
+            No models loaded
+          </div>
 
           <footer
             className="
@@ -321,28 +307,19 @@ export default function SmallWidget({
     );
   }
 
-  const modelName =
-    primaryModel.name.slice(
-      primaryModel.name.lastIndexOf("/") +
-      1,
-    );
+  const modelName = primaryModel.name.slice(
+    primaryModel.name.lastIndexOf("/") + 1,
+  );
 
-  const modelBrand =
-    getModelBrand(primaryModel.name);
+  const modelBrand = getModelBrand(primaryModel.name);
 
-  const processorSplit =
-    getProcessorSplit(primaryModel);
+  const processorSplit = getProcessorSplit(primaryModel);
 
-  const isLoaded =
-    primaryModel.status === "Loaded";
+  const isLoaded = primaryModel.status === "Loaded";
 
-  const contextInThousands =
-    primaryModel.context_length
-      ? Math.round(
-        primaryModel.context_length /
-        1000,
-      )
-      : null;
+  const contextInThousands = primaryModel.context_length
+    ? Math.round(primaryModel.context_length / 1000)
+    : null;
 
   return (
     <main
@@ -367,7 +344,6 @@ export default function SmallWidget({
           border-white/15
         "
       >
-
         <header
           data-tauri-drag-region
           className="
@@ -437,17 +413,13 @@ export default function SmallWidget({
                     w-2
                     h-2
                     rounded-full
-                    ${loadedModels.length > 0
-                      ? "bg-green-400"
-                      : "bg-white/30"
-                    }
+                    ${loadedModels.length > 0 ? "bg-green-400" : "bg-white/30"}
                   `}
                 />
 
                 <span>
-                  {loadedModels.length} {loadedModels.length === 1
-                    ? "model"
-                    : "models"} loaded
+                  {loadedModels.length}{" "}
+                  {loadedModels.length === 1 ? "model" : "models"} loaded
                 </span>
               </div>
             </div>
@@ -461,16 +433,17 @@ export default function SmallWidget({
             "
           >
             <button
-                type="button"
+              type="button"
               onClick={onToggleOnTop}
               className={`
                 p-2
                 rounded-lg
                 transition-colors
                 cursor-pointer
-                ${onTop
-                  ? "text-blue-400"
-                  : "text-white/50 hover:text-white hover:bg-white/10"
+                ${
+                  onTop
+                    ? "text-blue-400"
+                    : "text-white/50 hover:text-white hover:bg-white/10"
                 }
               `}
               aria-label="Always on top"
@@ -478,7 +451,7 @@ export default function SmallWidget({
               <Pin className="w-5 h-5" />
             </button>
 
-            <button 
+            <button
               type="button"
               onClick={onSettings}
               className="
@@ -618,25 +591,14 @@ export default function SmallWidget({
                   text-xs
                 "
               >
-                <span
-                  className={
-                    isLoaded
-                      ? "text-green-400"
-                      : "text-white/40"
-                  }
-                >
+                <span className={isLoaded ? "text-green-400" : "text-white/40"}>
                   {primaryModel.status}
                 </span>
 
-                <span className="text-white/25">
-                  •
-                </span>
+                <span className="text-white/25">•</span>
 
                 <span className="text-white/50">
-                  {
-                    primaryModel.details
-                      .parameter_size
-                  }
+                  {primaryModel.details.parameter_size}
                 </span>
               </div>
             </div>
@@ -680,66 +642,36 @@ export default function SmallWidget({
             "
           >
             <StatRow
-              icon={
-                <Microchip className="w-5 h-5" />
-              }
+              icon={<Microchip className="w-5 h-5" />}
               label="GPU"
-              value={`${isLoaded
-                  ? processorSplit.gpu.toFixed(0)
-                  : 0
-                }%`}
+              value={`${isLoaded ? processorSplit.gpu.toFixed(0) : 0}%`}
               iconClass="text-green-400"
               valueClass="text-green-400"
             />
 
             <StatRow
-              icon={
-                <Cpu className="w-5 h-5" />
-              }
+              icon={<Cpu className="w-5 h-5" />}
               label="CPU"
-              value={`${isLoaded
-                  ? processorSplit.cpu.toFixed(0)
-                  : 0
-                }%`}
+              value={`${isLoaded ? processorSplit.cpu.toFixed(0) : 0}%`}
               iconClass="text-blue-300"
               valueClass="text-blue-300"
             />
 
             <StatRow
-              icon={
-                <MemoryStick className="w-5 h-5" />
-              }
+              icon={<MemoryStick className="w-5 h-5" />}
               label="VRAM"
-              value={`${(
-                gpuStats.used /
-                1024 /
-                1024 /
-                1024
-              ).toFixed(1)} / ${(
-                gpuStats.total /
-                1024 /
-                1024 /
-                1024
+              value={`${(gpuStats.used / 1024 / 1024 / 1024).toFixed(1)} / ${(
+                gpuStats.total / 1024 / 1024 / 1024
               ).toFixed(0)} GB`}
               iconClass="text-purple-400"
               valueClass="text-purple-400"
             />
 
             <StatRow
-              icon={
-                <MemoryStick className="w-5 h-5" />
-              }
+              icon={<MemoryStick className="w-5 h-5" />}
               label="RAM"
-              value={`${(
-                cpuStats.used /
-                1024 /
-                1024 /
-                1024
-              ).toFixed(1)} / ${(
-                cpuStats.total /
-                1024 /
-                1024 /
-                1024
+              value={`${(cpuStats.used / 1024 / 1024 / 1024).toFixed(1)} / ${(
+                cpuStats.total / 1024 / 1024 / 1024
               ).toFixed(0)} GB`}
               iconClass="text-blue-400"
               valueClass="text-blue-400"
