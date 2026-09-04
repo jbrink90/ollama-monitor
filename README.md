@@ -38,13 +38,16 @@ npm run tauri dev
 
 ## Configuration
 
-Defaults are set in `src/app/page.tsx`:
+Defaults are set in `src/lib/settings.ts`:
 
 ```ts
-const DEFAULT_REFRESH_INTERVAL = "5000";
-const DEFAULT_OLLAMA_INSTANCE = "http://127.0.0.1:11434";
-const DEFAULT_TOTAL_RAM = "32";
-const DEFAULT_TOTAL_VRAM = "12";
+export const DEFAULT_SETTINGS = {
+  refreshInterval: 5000,
+  ollamaInstance: "http://127.0.0.1:11434",
+  totalRam: 32,
+  totalVram: 12,
+  smallWidget: false,
+} as const;
 ```
 
 Or change settings via the settings window (⚙ icon) after the app loads.
