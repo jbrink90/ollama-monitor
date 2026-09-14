@@ -2,7 +2,7 @@
 
 import { Minus, X } from "lucide-react";
 import { useCallback, useEffect, useState } from "react";
-import { getSettings, saveSettings } from "@/lib/settings";
+import { getSettings, initializeSettings, saveSettings } from "@/lib/settings";
 
 const refreshIntervalOptions = [
   { label: "1 second", value: 1000 },
@@ -38,6 +38,7 @@ export default function SettingsPage() {
   }, []);
 
   useEffect(() => {
+    initializeSettings();
     loadSettings();
 
     window.addEventListener("focus", loadSettings);
