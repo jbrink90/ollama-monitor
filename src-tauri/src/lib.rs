@@ -8,7 +8,7 @@ use tauri::{
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
   let result = tauri::Builder::default()
-    .plugin(tauri_plugin_single_instance::init(|app, args, cwd| {}))
+    .plugin(tauri_plugin_single_instance::init(|_app, _args, _cwd| {}))
     .plugin(tauri_plugin_opener::init())
     .plugin(tauri_plugin_process::init())
     .setup(|app| {
