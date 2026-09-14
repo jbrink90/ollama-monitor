@@ -56,3 +56,6 @@ needless_pass_by_value = "warn"
 # Style (warn)
 missing_errors_doc = "warn"
 missing_panics_doc = "warn"
+
+[target.'cfg(not(any(target_os = "android", target_os = "ios")))'.dependencies]
+tauri-plugin-single-instance = "2"
