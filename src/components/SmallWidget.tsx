@@ -49,7 +49,7 @@ export default function SmallWidget({
     }
     return "http://tauri.localhost";
   };
-  
+
   const loadedModels = modelList.filter((model) => model.status === "Loaded");
 
   const primaryModel = loadedModels[0];
@@ -251,15 +251,15 @@ export default function SmallWidget({
               text-white/40
             "
           >
-                    {Boolean(error) && (
-          <div className="text-red-400 px-4 text-center text-sm">
-            {error}
-            <div className="text-xs mt-1 underline">
-              {`Have you added this hostname to OLLAMA_ORIGINS? ${getTauriHostname()}`}
-            </div>
-          </div>
-        )}
-          No Models Loaded
+            {Boolean(error) && (
+              <div className="text-red-400 px-4 text-center text-sm">
+                {error}
+                <div className="text-xs mt-1 underline">
+                  {`Have you added this hostname to OLLAMA_ORIGINS? ${getTauriHostname()}`}
+                </div>
+              </div>
+            )}
+            No Models Loaded
           </div>
 
           <footer

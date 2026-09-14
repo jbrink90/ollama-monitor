@@ -94,7 +94,9 @@ export async function getOllamaModels(): Promise<OllamaTagsResponse> {
   const response = await fetch(`${getOllamaUrl()}/api/tags`);
 
   if (!response.ok) {
-    throw new Error(`Ollama returned ${response.status} ${response.statusText}`);
+    throw new Error(
+      `Ollama returned ${response.status} ${response.statusText}`,
+    );
   }
 
   const data = await response.json();
@@ -110,11 +112,13 @@ export async function getOllamaModels(): Promise<OllamaTagsResponse> {
 
 export async function getOllamaPs(): Promise<OllamaPsResponse> {
   const response = await fetch(`${getOllamaUrl()}/api/ps`);
- 
+
   if (!response.ok) {
-    throw new Error(`Ollama returned ${response.status} ${response.statusText}`);
+    throw new Error(
+      `Ollama returned ${response.status} ${response.statusText}`,
+    );
   }
- 
+
   return response.json();
 }
 export async function getOllamaPsMock(): Promise<OllamaPsResponse> {

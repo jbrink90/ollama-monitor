@@ -226,7 +226,7 @@ export default function LargeWidget({
           <div className="text-red-400 px-4 pt-2 text-center text-sm">
             {error}
             <div className="text-xs mt-1 underline">
-              Have you added your hostname to OLLAMA_ORIGINS?:  
+              Have you added your hostname to OLLAMA_ORIGINS?:
               {getTauriHostname()}
             </div>
           </div>
