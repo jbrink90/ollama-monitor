@@ -11,7 +11,7 @@ import {
   type OllamaPsModel,
 } from "@/lib/ollama";
 
-import { getSettings } from "@/lib/settings";
+import { getSettings, initializeSettings } from "@/lib/settings";
 
 import LargeWidget from "./LargeWidget";
 import SmallWidget from "./SmallWidget";
@@ -64,6 +64,7 @@ export default function MainWidget() {
   }, []);
 
   useEffect(() => {
+    initializeSettings();
     loadSettings();
   }, [loadSettings]);
 
@@ -241,6 +242,7 @@ export default function MainWidget() {
   if (smallWidget) {
     return (
       <SmallWidget
+        error={error}
         modelList={modelList}
         gpuStats={gpuStats}
         cpuStats={cpuStats}

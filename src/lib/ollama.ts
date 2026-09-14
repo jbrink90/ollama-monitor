@@ -92,6 +92,11 @@ export function calculateProcessorStats(
 
 export async function getOllamaModels(): Promise<OllamaTagsResponse> {
   const response = await fetch(`${getOllamaUrl()}/api/tags`);
+
+  if (!response.ok) {
+    throw new Error(`Ollama returned ${response.status} ${response.statusText}`);
+  }
+
   const data = await response.json();
 
   data.models.sort((a: OllamaTagsModel, b: OllamaTagsModel) => {
@@ -104,21 +109,13 @@ export async function getOllamaModels(): Promise<OllamaTagsResponse> {
 }
 
 export async function getOllamaPs(): Promise<OllamaPsResponse> {
-  try {
-    const response = await fetch(`${getOllamaUrl()}/api/ps`);
-
-    if (!response.ok) {
-      throw new Error(
-        `Ollama returned ${response.status} ${response.statusText}`,
-      );
-    }
-
-    return response.json();
-  } catch (error) {
-    throw new Error(
-      `Failed to reach Ollama at ${getOllamaUrl()}/api/ps: ${error}`,
-    );
+  const response = await fetch(`${getOllamaUrl()}/api/ps`);
+ 
+  if (!response.ok) {
+    throw new Error(`Ollama returned ${response.status} ${response.statusText}`);
   }
+ 
+  return response.json();
 }
 export async function getOllamaPsMock(): Promise<OllamaPsResponse> {
   return {

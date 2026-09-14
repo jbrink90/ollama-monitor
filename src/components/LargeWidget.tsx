@@ -59,6 +59,13 @@ export default function LargeWidget({
   onMinimize,
   onClose,
 }: LargeWidgetProps) {
+  const getTauriHostname = () => {
+    if (typeof window !== "undefined") {
+      return window.location.origin;
+    }
+    return "http://tauri.localhost";
+  };
+
   const loadedModelCount = modelList.filter(
     (model) => model.status === "Loaded",
   ).length;
@@ -216,7 +223,13 @@ export default function LargeWidget({
         "
       >
         {Boolean(error) && (
-          <div className="text-red-400 px-4 pt-2">{error}</div>
+          <div className="text-red-400 px-4 pt-2 text-center text-sm">
+            {error}
+            <div className="text-xs mt-1 underline">
+              Have you added your hostname to OLLAMA_ORIGINS?:  
+              {getTauriHostname()}
+            </div>
+          </div>
         )}
 
         <div
