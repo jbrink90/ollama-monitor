@@ -1,6 +1,6 @@
 [package]
 name = "ollama-monitor"
-version = "1.0.0"
+version = "1.1.0"
 description = "A lightweight, cross-platform dashboard for monitoring locally running Ollama models and system resources."
 authors = ["jbrink90"]
 edition = "2024"
