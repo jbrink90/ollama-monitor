@@ -12,7 +12,7 @@ export interface OllamaPsResponse {
   models: OllamaPsModel[];
 }
 
-export type OllamaModelStatus = "Loaded" | "Unloaded";
+export type OllamaModelStatus = "Loaded" | "Unloaded" | "Unloading";
 
 export interface OllamaPsModel {
   name: string;
@@ -120,6 +120,25 @@ export async function getOllamaPs(): Promise<OllamaPsResponse> {
   }
 
   return response.json();
+}
+
+export async function unloadOllamaModel(modelName: string): Promise<void> {
+  const response = await fetch(`${getOllamaUrl()}/api/generate`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      model: modelName,
+      keep_alive: 0,
+    }),
+  });
+
+  if (!response.ok) {
+    throw new Error(
+      `Ollama returned ${response.status} ${response.statusText}`,
+    );
+  }
 }
 export async function getOllamaPsMock(): Promise<OllamaPsResponse> {
   return {

@@ -2,11 +2,13 @@
 
 import {
   Gpu,
+  Loader2,
   MemoryStick,
   Minus,
   Pin,
   RefreshCw,
   Settings,
+  Trash2,
   X,
 } from "lucide-react";
 
@@ -45,6 +47,8 @@ interface LargeWidgetProps {
   onSettings: () => void;
   onMinimize: () => void;
   onClose: () => void;
+  onUnloadModel: (modelName: string) => void;
+  unloadingModels: Set<string>;
 }
 
 export default function LargeWidget({
@@ -58,6 +62,8 @@ export default function LargeWidget({
   onSettings,
   onMinimize,
   onClose,
+  onUnloadModel,
+  unloadingModels,
 }: LargeWidgetProps) {
   const getTauriHostname = () => {
     if (typeof window !== "undefined") {
@@ -383,7 +389,9 @@ export default function LargeWidget({
                             ${
                               model.status === "Loaded"
                                 ? "bg-green-500"
-                                : "bg-white/30"
+                                : model.status === "Unloading"
+                                  ? "bg-yellow-500"
+                                  : "bg-white/30"
                             }
                           `}
                       />
@@ -431,6 +439,45 @@ export default function LargeWidget({
                         ) : null}
                       </div>
                     </div>
+
+                    {(model.status === "Loaded" ||
+                      model.status === "Unloading") && (
+                      <button
+                        type="button"
+                        onClick={() => onUnloadModel(model.name)}
+                        disabled={unloadingModels.has(model.name)}
+                        className="
+                          mt-2
+                          px-3
+                          py-1
+                          bg-red-500/20
+                          hover:bg-red-500/30
+                          text-red-400
+                          rounded
+                          text-sm
+                          transition-colors
+                          cursor-pointer
+                          flex
+                          items-center
+                          gap-1
+                          disabled:opacity-50
+                          disabled:cursor-not-allowed
+                        "
+                        aria-label={`Unload ${model.name}`}
+                      >
+                        {unloadingModels.has(model.name) ? (
+                          <>
+                            <Loader2 className="w-4 h-4 animate-spin" />
+                            Unloading...
+                          </>
+                        ) : (
+                          <>
+                            <Trash2 className="w-4 h-4" />
+                            Unload
+                          </>
+                        )}
+                      </button>
+                    )}
                   </div>
 
                   <div

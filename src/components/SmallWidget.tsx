@@ -1,12 +1,14 @@
 "use client";
 import {
   Cpu,
+  Loader2,
   MemoryStick,
   Microchip,
   Minus,
   Pin,
   Server,
   Settings,
+  Trash2,
   X,
 } from "lucide-react";
 import Image from "next/image";
@@ -29,6 +31,8 @@ interface SmallWidgetProps {
   onSettings: () => void;
   onMinimize: () => void;
   onClose: () => void;
+  onUnloadModel: (modelName: string) => void;
+  unloadingModels: Set<string>;
 }
 
 export default function SmallWidget({
@@ -42,6 +46,8 @@ export default function SmallWidget({
   onSettings,
   onMinimize,
   onClose,
+  onUnloadModel,
+  unloadingModels,
 }: SmallWidgetProps) {
   const getTauriHostname = () => {
     if (typeof window !== "undefined") {
@@ -332,7 +338,8 @@ export default function SmallWidget({
 
   const processorSplit = getProcessorSplit(primaryModel);
 
-  const isLoaded = primaryModel.status === "Loaded";
+  const isLoaded =
+    primaryModel.status === "Loaded" || primaryModel.status === "Unloading";
 
   const contextInThousands = primaryModel.context_length
     ? Math.round(primaryModel.context_length / 1000)
@@ -608,7 +615,15 @@ export default function SmallWidget({
                   text-xs
                 "
               >
-                <span className={isLoaded ? "text-green-400" : "text-white/40"}>
+                <span
+                  className={
+                    primaryModel.status === "Loaded"
+                      ? "text-green-400"
+                      : primaryModel.status === "Unloading"
+                        ? "text-yellow-400"
+                        : "text-white/40"
+                  }
+                >
                   {primaryModel.status}
                 </span>
 
@@ -621,9 +636,10 @@ export default function SmallWidget({
             </div>
           </div>
 
-          {contextInThousands !== undefined && (
-            <div
-              className="
+          <div className="flex items-center gap-2">
+            {contextInThousands !== undefined && (
+              <div
+                className="
                 shrink-0
                 ml-3
                 px-2.5
@@ -636,10 +652,50 @@ export default function SmallWidget({
                 text-xs
                 font-medium
               "
-            >
-              {contextInThousands}K ctx
-            </div>
-          )}
+              >
+                {contextInThousands}K ctx
+              </div>
+            )}
+
+            {isLoaded && (
+              <button
+                type="button"
+                onClick={() => onUnloadModel(primaryModel.name)}
+                disabled={unloadingModels.has(primaryModel.name)}
+                className="
+                  shrink-0
+                  px-2.5
+                  py-1.5
+                  rounded-xl
+                  bg-red-500/20
+                  hover:bg-red-500/30
+                  text-red-400
+                  text-xs
+                  font-medium
+                  transition-colors
+                  cursor-pointer
+                  flex
+                  items-center
+                  gap-1
+                  disabled:opacity-50
+                  disabled:cursor-not-allowed
+                "
+                aria-label={`Unload ${primaryModel.name}`}
+              >
+                {unloadingModels.has(primaryModel.name) ? (
+                  <>
+                    <Loader2 className="w-3 h-3 animate-spin" />
+                    Unloading...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 className="w-3 h-3" />
+                    Unload
+                  </>
+                )}
+              </button>
+            )}
+          </div>
         </section>
 
         <section

@@ -9,6 +9,7 @@ import {
   getOllamaPs,
   getOllamaUrl,
   type OllamaPsModel,
+  unloadOllamaModel,
 } from "@/lib/ollama";
 
 import { getSettings, initializeSettings } from "@/lib/settings";
@@ -32,6 +33,10 @@ export default function MainWidget() {
   const [totalVram, setTotalVram] = useState(12);
 
   const [modelList, setModelList] = useState<OllamaPsModel[]>([]);
+
+  const [unloadingModels, setUnloadingModels] = useState<Set<string>>(
+    new Set(),
+  );
 
   const totalVramBytes = totalVram * 1024 ** 3;
 
@@ -179,6 +184,45 @@ export default function MainWidget() {
     await exit(0);
   };
 
+  const unloadModel = async (modelName: string) => {
+    console.log("Attempting to unload model:", modelName);
+    try {
+      setUnloadingModels((prev) => new Set(prev).add(modelName));
+
+      setModelList((prev) =>
+        prev.map((model) =>
+          model.name === modelName
+            ? { ...model, status: "Unloading" as const }
+            : model,
+        ),
+      );
+
+      console.log("Calling unload API for:", modelName);
+      await unloadOllamaModel(modelName);
+      console.log("Unload API call completed for:", modelName);
+
+      await refresh();
+      console.log("Refresh completed after unloading:", modelName);
+    } catch (error) {
+      console.error("Failed to unload model:", error);
+      setError(`Failed to unload model: ${String(error)}`);
+
+      setModelList((prev) =>
+        prev.map((model) =>
+          model.name === modelName
+            ? { ...model, status: "Loaded" as const }
+            : model,
+        ),
+      );
+    } finally {
+      setUnloadingModels((prev) => {
+        const next = new Set(prev);
+        next.delete(modelName);
+        return next;
+      });
+    }
+  };
+
   useEffect(() => {
     const setAlwaysOnTop = async () => {
       if (typeof window === "undefined") {
@@ -252,6 +296,8 @@ export default function MainWidget() {
         onSettings={openSettings}
         onMinimize={minimize}
         onClose={close}
+        onUnloadModel={unloadModel}
+        unloadingModels={unloadingModels}
       />
     );
   }
@@ -268,6 +314,8 @@ export default function MainWidget() {
       onSettings={openSettings}
       onMinimize={minimize}
       onClose={close}
+      onUnloadModel={unloadModel}
+      unloadingModels={unloadingModels}
     />
   );
 }

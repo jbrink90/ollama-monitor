@@ -48,24 +48,6 @@ export default function SettingsPage() {
     };
   }, [loadSettings]);
 
-  const minimize = async () => {
-    if (typeof window === "undefined") {
-      return;
-    }
-
-    if (!("__TAURI_INTERNALS__" in window)) {
-      return;
-    }
-
-    const { WebviewWindow } = await import("@tauri-apps/api/webviewWindow");
-
-    const settingsWindow = await WebviewWindow.getByLabel("settings");
-
-    if (settingsWindow) {
-      await settingsWindow.minimize();
-    }
-  };
-
   const close = async () => {
     if (typeof window === "undefined") {
       return;
@@ -154,15 +136,6 @@ export default function SettingsPage() {
             pb-4
           "
         >
-          <button
-            type="button"
-            className="cursor-pointer"
-            onClick={minimize}
-            aria-label="Minimize"
-          >
-            <Minus className="w-8 h-8" />
-          </button>
-
           <button
             type="button"
             className="cursor-pointer"
